@@ -23,7 +23,7 @@ public class CamionService {
     }
 
     public List<Camion> buscar(String marca, String modelo, Float capacidad) {
-        StringBuilder sql = new StringBuilder("select c from Camion c where 1=1");
+        StringBuilder sql = new StringBuilder("select c from Camion c where deleted = false");
         if (marca != null) {
             sql.append(" and lower(c.marca) like lower(:marca)");
         }
@@ -57,4 +57,14 @@ public class CamionService {
         camion.setCapacidad(datos.getCapacidad());
         return camion;
     }
+
+    @Transactional
+    public void sofDelete(Integer id) {
+        Camion camion = em.find(Camion.class, id);
+        if (camion != null) {
+            camion.setDeleted(true);
+            em.merge(camion);
+        }
+    }
+
 }

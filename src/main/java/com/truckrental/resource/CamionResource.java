@@ -41,4 +41,15 @@ public class CamionResource {
                     .build();
         }
     }
+
+    @DELETE
+    @Path("/{id}")
+    public Response delete(@PathParam("id") Integer id){
+        try {
+            camionService.sofDelete(id);
+            return Response.noContent().build();
+        } catch (Exception e) {
+            return Response.serverError().entity(e.getMessage()).build();
+        }
+    }
 }

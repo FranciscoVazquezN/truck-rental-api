@@ -26,6 +26,8 @@ public class Camion {
     @Column(name = "capacidad")
     private Float capacidad;
 
+    private Boolean deleted = false;
+
 }
 
 
