@@ -1,6 +1,6 @@
 package com.truckrental.resource;
 
-import com.truckrental.model.Camion;
+import com.truckrental.entity.Camion;
 import com.truckrental.service.CamionService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -24,10 +24,8 @@ public class CamionResource {
     }
 
     @GET
-    public List<Camion> buscar(@QueryParam("marca") String marca,
-                               @QueryParam("modelo") String modelo,
-                               @QueryParam("capacidad") Float capacidad) {
-        return camionService.buscar(marca, modelo, capacidad);
+    public List<Camion> buscar(@QueryParam("capacidad") Double capacidad) {
+        return camionService.buscar(capacidad);
     }
 
     @PUT

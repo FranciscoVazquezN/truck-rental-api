@@ -1,9 +1,11 @@
-package com.truckrental.model;
+package com.truckrental.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -17,16 +19,13 @@ public class Camion {
     @SequenceGenerator(name = "camion_id_camion_seq", sequenceName = "camion_id_camion_seq", allocationSize = 1)
     private int idCamion;
 
-    @Column(name = "marca", nullable = false, length = 100)
-    private String marca;
+    @Column(name = "capacidad", nullable = false)
+    private Double capacidad;
 
-    @Column(name = "modelo", nullable = false, length = 100)
-    private String modelo;
+    private Boolean activo = true;
 
-    @Column(name = "capacidad")
-    private Float capacidad;
-
-    private Boolean deleted = false;
+    @OneToMany(mappedBy = "camion")
+    private List<ReservaCamion> reservas;
 
 }
 

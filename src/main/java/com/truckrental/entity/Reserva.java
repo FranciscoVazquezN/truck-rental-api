@@ -1,4 +1,4 @@
-package com.truckrental.model;
+package com.truckrental.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -22,18 +22,21 @@ public class Reserva {
     private int idReserva;
 
     private String origen;
-
     private String destino;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date fecha;
+    @Column(name = "fecha_desde")
+    private LocalDate fechaDesde;
 
-    private Float volumen;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(name = "fecha_hasta")
+    private LocalDate fechaHasta;
 
-    @ManyToMany
-    @JoinTable(name = "reserva_camion", joinColumns = @JoinColumn(name = "reserva_id"),
-            inverseJoinColumns = @JoinColumn(name = "camion_id"))
-    private List<Camion> camiones;
+    @Column(name = "volumen_total", nullable = false)
+    private Double volumenTotal;
+
+    @OneToMany(mappedBy = "reserva", cascade = CascadeType.ALL)
+    private List<ReservaCamion> camiones;
 
     private Boolean cancelado = false;
 

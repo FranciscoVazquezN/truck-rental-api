@@ -1,6 +1,6 @@
 package com.truckrental.service;
 
-import com.truckrental.model.Camion;
+import com.truckrental.entity.Camion;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -22,24 +22,12 @@ public class CamionService {
         return camion;
     }
 
-    public List<Camion> buscar(String marca, String modelo, Float capacidad) {
-        StringBuilder sql = new StringBuilder("select c from Camion c where deleted = false");
-        if (marca != null) {
-            sql.append(" and lower(c.marca) like lower(:marca)");
-        }
-        if (modelo != null) {
-            sql.append(" and lower(c.modelo) like lower(:modelo)");
-        }
+    public List<Camion> buscar(Double capacidad) {
+        StringBuilder sql = new StringBuilder("select c from Camion c where activo = true");
         if (capacidad != null) {
             sql.append(" and c.capacidad >= :capacidad");
         }
         TypedQuery<Camion> query = em.createQuery(sql.toString(), Camion.class);
-        if (marca != null) {
-            query.setParameter("marca", "%"  + marca + "%");
-        }
-        if (modelo != null) {
-            query.setParameter("modelo", "%"  + modelo + "%");
-        }
         if (capacidad != null) {
             query.setParameter("capacidad", capacidad);
         }
@@ -52,8 +40,6 @@ public class CamionService {
         if (camion == null) {
             throw new NotFoundException("Camion con id " + id + " no encontrado");
         }
-        camion.setMarca(datos.getMarca());
-        camion.setModelo(datos.getModelo());
         camion.setCapacidad(datos.getCapacidad());
         return camion;
     }
@@ -62,7 +48,7 @@ public class CamionService {
     public void sofDelete(Integer id) {
         Camion camion = em.find(Camion.class, id);
         if (camion != null) {
-            camion.setDeleted(true);
+            camion.setActivo(false);
             em.merge(camion);
         }
     }
